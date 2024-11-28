@@ -13,10 +13,17 @@ const getAllCarsFromDb = async () => {
     const result = await CarModel.find()
     return result
 }
+// 3. Get a Specific Car
+const getSpecificCar = async (id: string) => {
+    const result = await CarModel.findById(id)
+    return result
+}
 
 
 export const CarServices = {
     createCarInDB,
     getAllCarsFromDb,
+    getSpecificCar,
+
 
 }

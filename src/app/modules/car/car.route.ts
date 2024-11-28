@@ -5,5 +5,7 @@ const router = express.Router()
 router.post('/api/cars', CarControllers.createCar)
 // 2. Get All Cars
 router.get('/api/cars', CarControllers.getCars)
+// 3. Get a Specific Car
+router.get('/api/cars/:id', CarControllers.getSpecificCar)
 
 export const CarRoutes = router

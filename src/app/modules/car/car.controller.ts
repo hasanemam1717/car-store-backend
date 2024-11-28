@@ -30,13 +30,32 @@ const getCars = async (req: Request, res: Response) => {
         })
     }
     catch (error) {
-        console.log(error);
+        // console.log(error);
         res.status(500).json({ status: false, massage: 'something went wrong', error: error });
     }
 
 }
 
+// 3. Get a Specific Car
+const getSpecificCar = async (req: Request, res: Response) => {
+    try {
+        const id = req.params.id
+        const result = await CarServices.getSpecificCar(id)
+        console.log("data", result);
+        res.status(200).json({
+            success: true,
+            massage: 'Car is retrieved successfully.',
+            data: result
+        })
+    }
+    catch (error) {
+        console.log(error);
+        res.status(500).json({ status: false, massage: 'something went wrong', error: error });
+    }
+}
+
 export const CarControllers = {
     createCar,
     getCars,
+    getSpecificCar
 }
