@@ -12,8 +12,7 @@ app.use(cors());
 app.use('/', CarRoutes);
 
 // order routers
-app.use('/', orderRouter)
-
+app.use('/', orderRouter);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Server is running 💨🏃‍♀️');

@@ -8,8 +8,8 @@ router.get('/api/cars', CarControllers.getCars);
 // 3. Get a Specific Car
 router.get('/api/cars/:id', CarControllers.getSpecificCar);
 // 4. Update a Car
-router.patch('/api/cars/:id', CarControllers.updateCar)
+router.patch('/api/cars/:id', CarControllers.updateCar);
 // 5. Delete a Car
-router.delete('/api/cars/:id', CarControllers.deleteCar)
+router.delete('/api/cars/:id', CarControllers.deleteCar);
 
 export const CarRoutes = router;
