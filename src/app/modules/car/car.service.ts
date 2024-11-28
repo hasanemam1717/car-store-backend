@@ -20,8 +20,8 @@ const getSpecificCar = async (id: string) => {
 const updateCar = async (id: string, data: TCar) => {
     const result = await CarModel.findByIdAndUpdate(id, data, { new: true })
     return result;
-
 }
+// 5. Delete a Car
 const deleteCar = async (id: string) => {
     const result = await CarModel.findByIdAndDelete(id)
     return result;

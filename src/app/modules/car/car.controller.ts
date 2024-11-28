@@ -35,7 +35,6 @@ const getCars = async (req: Request, res: Response) => {
             .json({ status: false, massage: 'something went wrong', error: error });
     }
 };
-
 // 3. Get a Specific Car
 const getSpecificCar = async (req: Request, res: Response) => {
     try {
@@ -53,7 +52,6 @@ const getSpecificCar = async (req: Request, res: Response) => {
             .json({ status: false, massage: 'something went wrong', error: error });
     }
 };
-
 // 4. Update a Car
 const updateCar = async (req: Request, res: Response) => {
     try {
@@ -72,7 +70,6 @@ const updateCar = async (req: Request, res: Response) => {
             .json({ status: false, massage: 'something went wrong', error: error });
     }
 }
-
 // 5. Delete a Car
 const deleteCar = async (req: Request, res: Response) => {
     try {
