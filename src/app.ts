@@ -7,9 +7,9 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-// routes 
+// routes
 
-app.use('/', CarRoutes)
+app.use('/', CarRoutes);
 
 app.get('/', (req: Request, res: Response) => {
   res.send('Server is running 💨🏃‍♀️');
