@@ -41,7 +41,6 @@ const getSpecificCar = async (req: Request, res: Response) => {
     try {
         const id = req.params.id;
         const result = await CarServices.getSpecificCar(id);
-        console.log('data', result);
         res.status(200).json({
             success: true,
             massage: 'Car is retrieved successfully.',
@@ -74,10 +73,29 @@ const updateCar = async (req: Request, res: Response) => {
     }
 }
 
+// 5. Delete a Car
+const deleteCar = async (req: Request, res: Response) => {
+    try {
+        const id = req.params.id;
+        const result = await CarServices.deleteCar(id)
+        res.status(200).json({
+            success: true,
+            massage: 'Car is deleted successfully.',
+            data: result,
+        });
+    } catch (error) {
+        console.log(error);
+        res
+            .status(500)
+            .json({ status: false, massage: 'something went wrong', error: error });
+    }
+}
+
 export const CarControllers = {
     createCar,
     getCars,
     getSpecificCar,
     updateCar,
+    deleteCar
 
 };

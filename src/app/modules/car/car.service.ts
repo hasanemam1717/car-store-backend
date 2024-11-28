@@ -16,22 +16,21 @@ const getSpecificCar = async (id: string) => {
     const result = await CarModel.findById(id);
     return result;
 };
-
 // 4. Update a Car
-// const updateSingleCarDB = async (id: string, updateData: UpdateQuery<TCars>) => {
-//     const res = await CarModel.findByIdAndUpdate(id, updateData, { new: true });
-//     return res;
-//   };
-
 const updateCar = async (id: string, data: TCar) => {
-    const result = await CarModel.findByIdAndUpdate(id, data)
+    const result = await CarModel.findByIdAndUpdate(id, data, { new: true })
     return result;
 
+}
+const deleteCar = async (id: string) => {
+    const result = await CarModel.findByIdAndDelete(id)
+    return result;
 }
 
 export const CarServices = {
     createCarInDB,
     getAllCarsFromDb,
     getSpecificCar,
-    updateCar
+    updateCar,
+    deleteCar
 };
