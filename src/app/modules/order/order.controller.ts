@@ -1,41 +1,40 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */
+
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { calculateRevenue, createOrder } from './order.service';
+import catchAsync from '../../utils/catchAsync';
+import sendResponse from '../../utils/sendResponse';
+import httpStatus from 'http-status';
 
-const orderCar = async (req: Request, res: Response) => {
-  try {
-    const orderData = req.body;
-    const result = await createOrder(orderData);
+const orderCar = catchAsync(async (req: Request, res: Response) => {
+  const orderData = req.body;
+  const result = await createOrder(orderData);
 
-    res.status(200).json({
-      message: 'Order created successfully',
-      status: true,
-      data: result,
-    });
-  } catch (error: any) {
-    console.log(error);
-    res.status(500).json({
-      message: error.message || 'Failed to create order',
-      status: false,
-    });
-  }
-};
+  res.status(200).json({
+    message: 'Order created successfully',
+    status: true,
+    data: result,
+  });
+  sendResponse(res, {
+    statusCode: (httpStatus.OK),
+    success: true,
+    message: "Total revenue is get successfully",
+    data: result
+  })
+});
 
-const getRevenue = async (_req: Request, res: Response) => {
-  try {
-    const totalRevenue = await calculateRevenue();
+const getRevenue = catchAsync(async (_req: Request, res: Response, next: NextFunction) => {
+  const totalRevenue = await calculateRevenue();
 
-    res.status(200).json({
-      message: 'Revenue calculated successfully',
-      status: true,
-      data: { totalRevenue },
-    });
-  } catch (error: any) {
-    res.status(500).json({
-      message: error.message || 'Failed to calculate revenue',
-      status: false,
-    });
-  }
-};
+  sendResponse(res, {
+    statusCode: (httpStatus.OK),
+    success: true,
+    message: "Total revenue is get successfully",
+    data: totalRevenue
+  })
+});
 
 export const orderController = { orderCar, getRevenue };
