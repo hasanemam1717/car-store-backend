@@ -14,16 +14,12 @@ const createOrder = async (orderData: any) => {
   }
 
   if (carData.quantity < quantity) {
-    throw new Error('Insufficient stock.');
+    throw new Error('This car is out of stock!');
   }
   // Reduces car stock quantity when order.
   carData.quantity = carData.quantity - quantity;
   // Checks if the stock is greater than 0, then sets the inStock property to true, otherwise false.
   carData.inStock = carData.quantity > 0;
-  // if (carData?.inStock === false) {
-  //   throw new Error('This car is out of stock!')
-  // }
-
 
   await carData.save();
 
@@ -33,6 +29,7 @@ const createOrder = async (orderData: any) => {
     carId,
     quantity,
     price,
+    totalPrice: Number(quantity * price)
   });
   const order = await OrderModel.create(Validation);
   return order;

@@ -9,6 +9,9 @@ const orderValidation = z.object({
     .positive({ message: 'Quantity must be a + integer' }),
   price: z
     .number()
+    .nonnegative({ message: 'Price must be 0 or greater' }),
+  totalPrice: z
+    .number()
     .nonnegative({ message: 'Total price must be 0 or greater' })
 });
 

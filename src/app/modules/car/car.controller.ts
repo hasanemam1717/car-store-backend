@@ -23,10 +23,11 @@ const createCar = catchAsync(async (req: Request, res: Response, next: NextFunct
 });
 // 2. Get All Cars
 const getCars = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const result = await CarServices.getAllCarsFromDb();
+  const result = await CarServices.getAllCarsFromDb(req.query);
+  // console.log(req.query);
   sendResponse(res, {
     statusCode: (httpStatus.OK),
-    success: true,
+    status: true,
     message: "Car are retrieved successfully",
     data: result
   })
@@ -37,7 +38,7 @@ const getSpecificCar = catchAsync(async (req: Request, res: Response, next: Next
   const result = await CarServices.getSpecificCar(id);
   sendResponse(res, {
     statusCode: (httpStatus.OK),
-    success: true,
+    status: true,
     message: 'Car is retrieved successfully',
     data: result
   })
@@ -48,7 +49,7 @@ const updateCar = catchAsync(async (req: Request, res: Response, next: NextFunct
   const data = req.body;
   const result = await CarServices.updateCar(id, data);
   sendResponse(res, {
-    success: true,
+    status: true,
     statusCode: (httpStatus.OK),
     message: 'Car is updated successfully.',
     data: result,
@@ -58,7 +59,7 @@ const updateCar = catchAsync(async (req: Request, res: Response, next: NextFunct
 const deleteCar = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const id = req.params.id;
   const result = await CarServices.deleteCar(id);
-  sendResponse(res, { statusCode: (httpStatus.OK), success: true, message: 'Car is deleted successfully!', data: result })
+  sendResponse(res, { statusCode: (httpStatus.OK), status: true, message: 'Car is deleted successfully!', data: result })
 
 });
 
