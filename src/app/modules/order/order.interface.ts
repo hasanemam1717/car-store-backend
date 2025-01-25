@@ -2,9 +2,9 @@ import { Schema } from 'mongoose';
 
 export interface TOrder {
   email: string;
-  car: Schema.Types.ObjectId;
+  carId: Schema.Types.ObjectId;
   quantity: number;
-  totalPrice: number;
+  price: number;
   createdAt: Date;
   updatedAt: Date;
 }

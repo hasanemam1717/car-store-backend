@@ -3,6 +3,8 @@ import { z } from 'zod';
 // Define the Zod schema
 export const carValidationSchema = z.object({
   brand: z.string().nonempty('Brand is required'),
+  image: z.string().nonempty('Image is required'),
+  name: z.string().nonempty('Name is required'),
   model: z.string().nonempty('Model is required'),
   year: z
     .number()

@@ -3,10 +3,13 @@ import { TCar } from './car.interface';
 
 // Create the Mongoose schema
 const carSchema = new Schema<TCar>({
+  name: { type: String, required: true },
+  image: { type: String, required: true },
   brand: { type: String, required: true },
   model: { type: String, required: true },
   year: { type: Number, required: true },
   price: { type: Number, required: true },
+
   category: {
     type: String,
     enum: ['Sedan', 'SUV', 'Truck', 'Coupe', 'Convertible'],
