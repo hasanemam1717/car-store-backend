@@ -5,6 +5,8 @@ import catchAsync from '../utils/catchAsync';
 import { TUserRole } from '../modules/user/user.interface';
 import { UserModel } from '../modules/user/user.model';
 import config from '../config';
+import AppError from '../errors/appError';
+import httpStatus from 'http-status';
 
 const auth = (...requiredRoles: TUserRole[]) => {
     return catchAsync(async (req: Request, res: Response, next: NextFunction) => {
@@ -15,10 +17,15 @@ const auth = (...requiredRoles: TUserRole[]) => {
         }
 
         // checking if the given token is valid
-        const decoded = jwt.verify(
-            token,
-            config.JWT_ACCESS_SECRET as string,
-        ) as JwtPayload;
+        let decoded;
+        try {
+            decoded = jwt.verify(
+                token,
+                config.JWT_ACCESS_SECRET as string,
+            ) as JwtPayload;
+        } catch (err) {
+            throw new AppError(httpStatus.UNAUTHORIZED, 'Unauthorized')
+        }
 
 
         const { role, email } = decoded;

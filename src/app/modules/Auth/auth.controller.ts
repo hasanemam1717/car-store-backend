@@ -37,7 +37,7 @@ const refreshToken = catchAsync(async (req: Request, res: Response) => {
     sendResponse(res, {
         statusCode: httpStatus.CREATED,
         status: true,
-        message: "  successfully",
+        message: " Refresh token is get successfully",
         data: result
     })
 })
