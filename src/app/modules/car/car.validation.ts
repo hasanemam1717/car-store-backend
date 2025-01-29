@@ -2,24 +2,16 @@ import { z } from 'zod';
 
 // Define the Zod schema
 export const carValidationSchema = z.object({
-  brand: z.string().nonempty('Brand is required'),
-  image: z.string().nonempty('Image is required'),
-  name: z.string().nonempty('Name is required'),
-  model: z.string().nonempty('Model is required'),
-  year: z
-    .number()
-    .int('Year must be an integer')
-    .min(1886, 'Year must be greater than 1885') // first car invented in 1886
-    .max(new Date().getFullYear(), 'Year cannot be in the future'),
-  price: z
-    .number()
-    .positive('Price must be a positive number')
-    .nonnegative('Price cannot be negative'),
-  category: z.enum(['Sedan', 'SUV', 'Truck', 'Coupe', 'Convertible']),
-  description: z.string().nonempty('Description is required'),
-  quantity: z
-    .number()
-    .int('Quantity must be an integer')
-    .min(0, 'Quantity cannot be negative'),
-  inStock: z.boolean(),
-});
+  body: z.object({
+    name: z.string().min(1, "Name is required"),
+    // image: z.string(),
+    brand: z.string().min(1, "Brand is required"),
+    model: z.string().min(1, "Model is required"),
+    year: z.number().int().min(1886, "Year must be a valid number"),
+    price: z.number().min(0, "Price must be a positive number"),
+    category: z.enum(["Sedan", "SUV", "Truck", "Coupe", "Convertible"]),
+    description: z.string().min(1, "Description is required"),
+    quantity: z.number().int().min(0, "Quantity must be a non-negative integer"),
+    inStock: z.boolean(),
+  })
+})

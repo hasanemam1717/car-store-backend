@@ -1,22 +1,18 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 import { NextFunction, Request, Response } from 'express';
-import { CarServices } from './car.service';
-import { carValidationSchema } from './car.validation';
 import sendResponse from '../../utils/sendResponse';
 import httpStatus from 'http-status';
 import catchAsync from '../../utils/catchAsync';
+import { CarServices } from './car.service';
 
 // 1. Create a Car
 const createCar = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
-  const car = req.body;
-  // zod validation
-  const validation = carValidationSchema.parse(car);
-  const result = await CarServices.createCarInDB(validation);
+  const result = await CarServices.createCarInDB(req.body, req.file);
 
   sendResponse(res, {
     statusCode: (httpStatus.OK),
-    success: true,
+    status: true,
     message: "Car is created successfully",
     data: result
   })
