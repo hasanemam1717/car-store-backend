@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 const orderValidation = z.object({
-  email: z.string().email({ message: 'Invalid email address' }),
+  userId: z.string().regex(/^[a-f\d]{24}$/i, { message: 'Invalid UserID ObjectId' }),
   carId: z.string().regex(/^[a-f\d]{24}$/i, { message: 'Invalid car ObjectId' }),
   quantity: z
     .number()

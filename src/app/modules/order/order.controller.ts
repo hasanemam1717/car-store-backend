@@ -30,5 +30,16 @@ const getRevenue = catchAsync(async (_req: Request, res: Response, next: NextFun
     data: totalRevenue
   })
 });
+const getDetails = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
+  // const is
+  const details = await orderService.getDetails()
 
-export const orderController = { orderCar, getRevenue };
+  sendResponse(res, {
+    statusCode: (httpStatus.OK),
+    status: true,
+    message: "Order details is get successfully",
+    data: details
+  })
+});
+
+export const orderController = { orderCar, getRevenue, getDetails };

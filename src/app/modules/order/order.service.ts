@@ -5,7 +5,7 @@ import { OrderModel } from './order.model';
 import orderValidation from './order.validation';
 
 const createOrder = async (orderData: any) => {
-  const { email, carId, quantity, price } = orderData;
+  const { userId, carId, quantity, price } = orderData;
 
   const carData = await CarModel.findById(carId);
 
@@ -25,7 +25,7 @@ const createOrder = async (orderData: any) => {
 
   // zod validation
   const Validation = orderValidation.parse({
-    email,
+    userId,
     carId,
     quantity,
     price,
@@ -48,7 +48,15 @@ const calculateRevenue = async () => {
   return result[0]?.totalRevenue || 0;
 };
 
+const getDetails = async () => {
+  const result = await OrderModel.find()
+  // console.log(result, "From order service");
+  return result
+
+}
+
 export const orderService = {
   createOrder,
-  calculateRevenue
+  calculateRevenue,
+  getDetails
 }
