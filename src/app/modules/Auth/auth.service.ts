@@ -25,7 +25,8 @@ const login = async (payload: ILogInUser) => {
         throw new Error('Password does not match!')
     }
     // generate token for authorization
-    const token = jwt.sign({ email: user?.email, role: user?.role }, config.JWT_ACCESS_SECRET as string, { expiresIn: "4s" })
+    const token = jwt.sign({ email: user?.email, role: user?.role }, config.JWT_ACCESS_SECRET as string, { expiresIn: "30d" })
+    // console.log(token);
     const refreshToken = jwt.sign({ email: user?.email, role: user?.role }, config.JWT_REFRESH_SECRET as string, { expiresIn: "365d" })
 
     const verifyUser = { name: user.name, email: user?.email, role: user?.role }

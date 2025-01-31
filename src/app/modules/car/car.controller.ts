@@ -20,13 +20,15 @@ const createCar = catchAsync(async (req: Request, res: Response, next: NextFunct
 // 2. Get All Cars
 const getCars = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const result = await CarServices.getAllCarsFromDb(req.query);
-  console.log(req.cookies);
+  // console.log(result);
+  // console.log(req.cookies);
   sendResponse(res, {
     statusCode: (httpStatus.OK),
     status: true,
     message: "Car are retrieved successfully",
     data: result
   })
+  // res.send(result)
 });
 // 3. Get a Specific Car
 const getSpecificCar = catchAsync(async (req: Request, res: Response, next: NextFunction) => {

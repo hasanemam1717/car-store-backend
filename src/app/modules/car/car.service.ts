@@ -11,7 +11,7 @@ const createCarInDB = async (car: TCar, file: any) => {
     const imageName = car?.name
     const path = file?.path
     const { secure_url } = await sendImageToCloudinary(imageName, path)
-    console.log(secure_url);
+    // console.log(secure_url);
     car.image = secure_url
     const result = await CarModel.create(car);
     return result;

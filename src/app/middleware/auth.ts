@@ -15,7 +15,7 @@ const auth = (...requiredRoles: TUserRole[]) => {
         if (!token) {
             throw new Error('You are not authorized!');
         }
-
+        // console.log(token);
         // checking if the given token is valid
         let decoded;
         try {
@@ -24,6 +24,7 @@ const auth = (...requiredRoles: TUserRole[]) => {
                 config.JWT_ACCESS_SECRET as string,
             ) as JwtPayload;
         } catch (err) {
+            console.log(err);
             throw new AppError(httpStatus.UNAUTHORIZED, 'Unauthorized')
         }
 
