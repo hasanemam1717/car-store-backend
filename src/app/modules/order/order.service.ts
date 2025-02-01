@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import { CarModel } from '../car/car.modle';
+import { TUser } from '../user/user.interface';
 import { OrderModel } from './order.model';
-import orderValidation from './order.validation';
+import { orderUtils } from './order.utils';
 
-const createOrder = async (orderData: any) => {
-  const { userId, carId, quantity, price } = orderData;
+const createOrder = async (user: TUser, orderData: any, client_ip: string) => {
+  const { userId, carId, quantity, price, status } = orderData;
 
   const carData = await CarModel.findById(carId);
 
@@ -22,17 +23,93 @@ const createOrder = async (orderData: any) => {
   carData.inStock = carData.quantity > 0;
 
   await carData.save();
-
-  // zod validation
-  const Validation = orderValidation.parse({
+  // Product Details
+  const productDetails = {
     userId,
     carId,
+    status,
     quantity,
     price,
     totalPrice: Number(quantity * price)
-  });
-  const order = await OrderModel.create(Validation);
-  return order;
+  };
+
+  // let order = await Order.create({
+  //   user,
+  //   products: productDetails,
+  //   totalPrice,
+  // });
+
+
+
+
+
+
+
+
+  const totalPrice = Number(quantity * price)
+  // console.log(productDetails, "To");
+  let order = await OrderModel.create(productDetails);
+  // payment integration
+  const shurjopayPayload = {
+    amount: totalPrice,
+    order_id: order._id,
+    currency: "BDT",
+    customer_name: user.name,
+    customer_address: user.address,
+    customer_email: user.email,
+    customer_phone: user.phone,
+    customer_city: user.city,
+    client_ip,
+  };
+
+  const payment = await orderUtils.makePaymentAsync(shurjopayPayload);
+
+  if (payment?.transactionStatus) {
+    order = await order.updateOne({
+      transaction: {
+        id: payment.sp_order_id,
+        transactionStatus: payment.transactionStatus,
+      },
+    });
+  }
+
+  return { paymentInfo: payment.checkout_url, payment };
+};
+
+// verify payment
+const verifyPayment = async (order_id: string) => {
+  const verifiedPayment = await orderUtils.verifyPaymentAsync(order_id);
+
+  if (verifiedPayment.length) {
+    await OrderModel.findOneAndUpdate(
+      {
+        "transaction.id": order_id,
+      },
+      {
+        "transaction.bank_status": verifiedPayment[0].bank_status,
+        "transaction.sp_code": verifiedPayment[0].sp_code,
+        "transaction.sp_message": verifiedPayment[0].sp_message,
+        "transaction.transactionStatus": verifiedPayment[0].transaction_status,
+        "transaction.method": verifiedPayment[0].method,
+        "transaction.date_time": verifiedPayment[0].date_time,
+        status:
+          verifiedPayment[0].bank_status == "Success"
+            ? "Paid"
+            : verifiedPayment[0].bank_status == "Failed"
+              ? "Pending"
+              : verifiedPayment[0].bank_status == "Cancel"
+                ? "Cancelled"
+                : "",
+      }
+    );
+  }
+
+  return verifiedPayment;
+};
+
+const getOrders = async () => {
+  const data = await OrderModel.find();
+  return data;
 };
 
 const calculateRevenue = async () => {
@@ -58,5 +135,7 @@ const getDetails = async () => {
 export const orderService = {
   createOrder,
   calculateRevenue,
-  getDetails
+  getDetails,
+  verifyPayment,
+  getOrders
 }

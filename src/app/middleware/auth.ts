@@ -33,6 +33,7 @@ const auth = (...requiredRoles: TUserRole[]) => {
 
         // checking if the user is exist
         const user = await UserModel.findOne({ email });
+        // console.log(user);
 
         if (!user) {
             throw new Error('This user is not found !')
@@ -50,8 +51,9 @@ const auth = (...requiredRoles: TUserRole[]) => {
                 'You are not authorized',
             );
         }
-
-        req.user = decoded as JwtPayload;
+        // console.log("User from auth", user);
+        // req.user = decoded as JwtPayload;
+        req.user = user
         next();
     });
 };
