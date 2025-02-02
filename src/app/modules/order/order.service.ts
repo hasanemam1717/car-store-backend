@@ -1,54 +1,115 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import AppError from '../../errors/appError';
 import { CarModel } from '../car/car.modle';
 import { TUser } from '../user/user.interface';
 import { OrderModel } from './order.model';
 import { orderUtils } from './order.utils';
 
-const createOrder = async (user: TUser, orderData: any, client_ip: string) => {
-  const { userId, carId, quantity, price, status } = orderData;
+// const createOrder = async (user: TUser, orderData: any, client_ip: string) => {
 
-  const carData = await CarModel.findById(carId);
+//   const { userId, carId, quantity, price, status } = orderData;
+//   console.log(orderData);
+//   console.log(user._id);
 
-  if (!carData) {
-    throw new Error('Car not found.');
-  }
+//   const carData = await CarModel.findById(carId);
 
-  if (carData.quantity < quantity) {
-    throw new Error('This car is out of stock!');
-  }
-  // Reduces car stock quantity when order.
-  carData.quantity = carData.quantity - quantity;
-  // Checks if the stock is greater than 0, then sets the inStock property to true, otherwise false.
-  carData.inStock = carData.quantity > 0;
+//   if (!carData) {
+//     throw new Error('Car not found.');
+//   }
 
-  await carData.save();
-  // Product Details
-  const productDetails = {
-    userId,
-    carId,
-    status,
-    quantity,
-    price,
-    totalPrice: Number(quantity * price)
-  };
+//   if (carData.quantity < quantity) {
+//     throw new Error('This car is out of stock!');
+//   }
+//   // Reduces car stock quantity when order.
+//   carData.quantity = carData.quantity - quantity;
+//   // Checks if the stock is greater than 0, then sets the inStock property to true, otherwise false.
+//   carData.inStock = carData.quantity > 0;
 
-  // let order = await Order.create({
-  //   user,
-  //   products: productDetails,
-  //   totalPrice,
-  // });
+//   await carData.save();
+//   // Product Details
+//   const productDetails = {
+//     userId,
+//     carId,
+//     status,
+//     quantity,
+//     price,
+//     totalPrice: Number(quantity * price)
+//   };
 
-
-
-
-
+//   // let order = await Order.create({
+//   //   user,
+//   //   products: productDetails,
+//   //   totalPrice,
+//   // });
 
 
 
-  const totalPrice = Number(quantity * price)
-  // console.log(productDetails, "To");
-  let order = await OrderModel.create(productDetails);
+
+
+
+
+
+//   const totalPrice = Number(quantity * price)
+//   // console.log(productDetails, "To");
+//   let order = await OrderModel.create(productDetails);
+//   // payment integration
+//   const shurjopayPayload = {
+//     amount: totalPrice,
+//     order_id: order._id,
+//     currency: "BDT",
+//     customer_name: user.name,
+//     customer_address: user.address,
+//     customer_email: user.email,
+//     customer_phone: user.phone,
+//     customer_city: user.city,
+//     client_ip,
+//   };
+
+//   const payment = await orderUtils.makePaymentAsync(shurjopayPayload);
+
+//   if (payment?.transactionStatus) {
+//     order = await order.updateOne({
+//       transaction: {
+//         id: payment.sp_order_id,
+//         transactionStatus: payment.transactionStatus,
+//       },
+//     });
+//   }
+
+//   return { paymentInfo: payment.checkout_url, payment };
+// };
+
+// verify payment
+
+const createOrder = async (
+  user: TUser,
+  payload: { products: { product: string; quantity: number }[] },
+  client_ip: string
+) => {
+  if (!payload?.products?.length)
+    throw new AppError(httpStatus.NOT_ACCEPTABLE, "Order is not specified");
+
+  const products = payload.products;
+
+  let totalPrice = 0;
+  const productDetails = await Promise.all(
+    products.map(async (item) => {
+      const product = await CarModel.findById(item.product);
+      if (product) {
+        const subtotal = product ? (product.price || 0) * item.quantity : 0;
+        totalPrice += subtotal;
+        return item;
+      }
+    })
+  );
+
+  let order = await OrderModel.create({
+    user,
+    products: productDetails,
+    totalPrice,
+  });
+
   // payment integration
   const shurjopayPayload = {
     amount: totalPrice,
@@ -73,10 +134,9 @@ const createOrder = async (user: TUser, orderData: any, client_ip: string) => {
     });
   }
 
-  return { paymentInfo: payment.checkout_url, payment };
+  return payment.checkout_url;
 };
 
-// verify payment
 const verifyPayment = async (order_id: string) => {
   const verifiedPayment = await orderUtils.verifyPaymentAsync(order_id);
 

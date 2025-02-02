@@ -7,18 +7,19 @@ import sendResponse from '../../utils/sendResponse';
 import httpStatus from 'http-status';
 import { orderService } from './order.service';
 
-const orderCar = catchAsync(async (req: Request, res: Response) => {
-  const user = req?.user
-  // console.log(user);
-  const orderData = req.body;
-  const result = await orderService.createOrder(user, orderData, req.ip!)
+const createOrder = catchAsync(async (req, res) => {
+  const user = req.user;
+
+  console.log(req.body);
+  const order = await orderService.createOrder(user, req.body, req.ip!);
+
   sendResponse(res, {
-    statusCode: (httpStatus.OK),
-    status: true,
-    message: "Your order created successfully!",
-    data: result
-  })
+    statusCode: httpStatus.CREATED,
+    message: "Order placed successfully",
+    data: order,
+  });
 });
+
 // verify order
 const verifyPayment = catchAsync(async (req, res) => {
   const order = await orderService.verifyPayment(req.query.order_id as string);
@@ -62,4 +63,4 @@ const getDetails = catchAsync(async (req: Request, res: Response, next: NextFunc
   })
 });
 
-export const orderController = { orderCar, getRevenue, getDetails, verifyPayment, getOrders };
+export const orderController = { createOrder, getRevenue, getDetails, verifyPayment, getOrders };

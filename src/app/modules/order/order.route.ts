@@ -12,7 +12,7 @@ router.get("/verify", auth(USER_ROLE.user), orderController.verifyPayment);
 
 router
     .route("/")
-    .post(auth(USER_ROLE.user), orderController.orderCar)
+    .post(auth(USER_ROLE.user), orderController.createOrder)
     .get(auth(USER_ROLE.user), orderController.getOrders);
 
 
@@ -23,7 +23,7 @@ router
 //     orderController.orderCar);
 // router.get("/verify", auth(USER_ROLE.user), orderController.verifyPayment);
 // router.get("/", auth(USER_ROLE.user), orderController.getOrders);
-// router.get('/revenue', orderController.getRevenue);
+router.get('/revenue', orderController.getRevenue);
 router.get('/details', orderController.getDetails);
 
 export const orderRoutes = router;

@@ -1,8 +1,12 @@
-import { Schema } from 'mongoose';
+import { Types } from 'mongoose';
 
 export interface TOrder {
-  userId: string;
-  carId: Schema.Types.ObjectId;
+  user: Types.ObjectId;
+  products: {
+    product: Types.ObjectId;
+    quantity: number;
+  }[];
+  totalPrice: number;
   status: "Pending" | "Paid" | "Shipped" | "Completed" | "Cancelled";
   transaction: {
     id: string;
@@ -13,9 +17,6 @@ export interface TOrder {
     method: string;
     date_time: string;
   };
-  quantity: number;
-  price: number;
-  totalPrice?: number;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
