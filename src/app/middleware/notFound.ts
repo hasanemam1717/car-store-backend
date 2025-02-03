@@ -1,12 +1,11 @@
 
-/* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import httpStatus from 'http-status';
 
 import { NextFunction, Request, Response } from 'express';
 
 const notFound = (req: Request, res: Response, next: NextFunction) => {
-    return res.status(httpStatus.NOT_FOUND).json({
+    res.status(httpStatus.NOT_FOUND).json({
         success: false,
         message: 'API Not Found !!',
         error: '',
@@ -14,3 +13,4 @@ const notFound = (req: Request, res: Response, next: NextFunction) => {
 };
 
 export default notFound;
+

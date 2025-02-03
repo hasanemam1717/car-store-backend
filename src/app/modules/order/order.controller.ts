@@ -1,16 +1,14 @@
+
 /* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable no-unused-vars */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { NextFunction, Request, Response } from 'express';
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import httpStatus from 'http-status';
 import { orderService } from './order.service';
-
 const createOrder = catchAsync(async (req, res) => {
   const user = req.user;
 
-  console.log(req.body);
+  // console.log(req.body);
   const order = await orderService.createOrder(user, req.body, req.ip!);
 
   sendResponse(res, {

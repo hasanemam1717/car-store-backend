@@ -2,7 +2,6 @@
 
 import AppError from '../../errors/appError';
 import { CarModel } from '../car/car.modle';
-import { TUser } from '../user/user.interface';
 import { OrderModel } from './order.model';
 import { orderUtils } from './order.utils';
 
@@ -83,7 +82,7 @@ import { orderUtils } from './order.utils';
 // verify payment
 
 const createOrder = async (
-  user: TUser,
+  user: any,
   payload: { products: { product: string; quantity: number }[] },
   client_ip: string
 ) => {

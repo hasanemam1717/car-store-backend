@@ -18,7 +18,7 @@ router.post('/',
     validateRequest(carValidationSchema),
     CarControllers.createCar);
 // 2. Get All Cars
-router.get('/', auth(USER_ROLE.user, USER_ROLE.admin), CarControllers.getCars);
+router.get('/', CarControllers.getCars);
 // 3. Get a Specific Car
 router.get('/:id', auth(USER_ROLE.admin), CarControllers.getSpecificCar);
 // 4. Update a Car

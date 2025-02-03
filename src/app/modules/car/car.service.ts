@@ -7,13 +7,12 @@ import { CarModel } from './car.modle';
 // 1. Create a Car
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const createCarInDB = async (car: TCar, file: any) => {
-    console.log(car, file, "console from car service");
+    // console.log(car, file, "console from car service");
 
     const imageName = car?.name
     const path = file?.path
     const { secure_url } = await sendImageToCloudinary(imageName, path)
-    // console.log(secure_url);
-    car.image = secure_url
+    car.image = secure_url as string
     const result = await CarModel.create(car);
     return result;
 };
