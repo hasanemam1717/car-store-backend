@@ -9,7 +9,6 @@ const carSchema = new Schema<TCar>({
   model: { type: String, required: true },
   year: { type: Number, required: true },
   price: { type: Number, required: true },
-
   category: {
     type: String,
     enum: ['Sedan', 'SUV', 'Truck', 'Coupe', 'Convertible'],
